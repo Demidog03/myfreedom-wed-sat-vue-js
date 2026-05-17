@@ -11,7 +11,7 @@ type Pages = 'Page1' | 'Page2'
 const activePage = ref<Pages>('Page1')
 
 function activatePage2() {
-  activePage.value = 'Page2' // rerender
+  activePage.value = 'Page2' // vue js триггерится - rerender
   console.log(activePage)
 }
 </script>

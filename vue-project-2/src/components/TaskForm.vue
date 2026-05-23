@@ -8,6 +8,12 @@ const emit = defineEmits<{
 }>()
 
 function addTaskLocal() {
+    // falsy => '', 0, undefined, null, false, NaN
+    if (!newTaskTitle.value.trim()) {
+        alert('Поле не может быть пустым!')
+        return
+    }
+
     emit('addTask', newTaskTitle.value.trim())
 
     // чистка

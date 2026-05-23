@@ -14,6 +14,9 @@ importers:
       vue-router:
         specifier: ^5.0.4
         version: 5.0.7(@vue/compiler-sfc@3.5.34)(vue@3.5.34(typescript@6.0.3))
+      z-vue-scan:
+        specifier: ^0.0.37
+        version: 0.0.37(vue@3.5.34(typescript@6.0.3))
     devDependencies:
       '@tsconfig/node24':
         specifier: ^24.0.4
@@ -1562,6 +1565,17 @@ packages:
   vscode-uri@3.1.0:
     resolution: {integrity: sha512-/BpdSx+yCQGnCvecbyXdxHDkuk55/G3xwnC0GqY4gmQ3j+A+g8kzzgB4Nk/SINjqn6+waqw3EgbVF2QKExkRxQ==}
 
+  vue-demi@0.14.10:
+    resolution: {integrity: sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==}
+    engines: {node: '>=12'}
+    hasBin: true
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^3.0.0-0 || ^2.6.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+
   vue-eslint-parser@10.4.0:
     resolution: {integrity: sha512-Vxi9pJdbN3ZnVGLODVtZ7y4Y2kzAAE2Cm0CZ3ZDRvydVYxZ6VrnBhLikBsRS+dpwj4Jv4UCv21PTEwF5rQ9WXg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
@@ -1633,6 +1647,15 @@ packages:
   yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+
+  z-vue-scan@0.0.37:
+    resolution: {integrity: sha512-asb8STkDQJaoHWpBMCOo0pI/a3Vet/UJLOeUPoqCH9s5TVZ5oKBk4th/HkmaHaQafqFgwptnQXRC+ny1A/CNzg==}
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^2.0.0 || >=3.0.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
 
 snapshots:
 
@@ -3090,6 +3113,10 @@ snapshots:
 
   vscode-uri@3.1.0: {}
 
+  vue-demi@0.14.10(vue@3.5.34(typescript@6.0.3)):
+    dependencies:
+      vue: 3.5.34(typescript@6.0.3)
+
   vue-eslint-parser@10.4.0(eslint@10.3.0(jiti@2.7.0)):
     dependencies:
       debug: 4.4.3
@@ -3164,3 +3191,8 @@ snapshots:
   yaml@2.9.0: {}
 
   yocto-queue@0.1.0: {}
+
+  z-vue-scan@0.0.37(vue@3.5.34(typescript@6.0.3)):
+    dependencies:
+      vue: 3.5.34(typescript@6.0.3)
+      vue-demi: 0.14.10(vue@3.5.34(typescript@6.0.3))

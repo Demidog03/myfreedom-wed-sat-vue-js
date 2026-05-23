@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { Task } from '@/types/task.types';
+import { onBeforeUnmount, onUnmounted } from 'vue';
 
-defineProps<{ // переменные которые получаем с род. компонента
+const props = defineProps<{ // переменные которые получаем с род. компонента
     task: Task,
 }>()
 
@@ -10,6 +11,25 @@ const emit = defineEmits<{ // функции которые получаем с 
     returnTask: [id: number],
     deleteTask: [id: number]
 }>()
+
+onBeforeUnmount(() => {
+    // DOM только собирается исчезнуть (li пока жив)
+    const button = document.getElementById('button')
+    button?.removeEventListener('click', () => {
+        console.log('fsdfsd')
+    })
+})
+
+onUnmounted(() => {
+    // DOM уже исчез - ниче не сработает
+    const button = document.getElementById('button')
+    button?.removeEventListener('click', () => {
+        console.log('fsdfsd')
+    })
+
+    console.log(props.task)
+    console.log('Компонент умер(')
+})
 </script>
 
 <template>

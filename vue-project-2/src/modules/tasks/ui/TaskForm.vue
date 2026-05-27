@@ -2,22 +2,24 @@
 import { ref } from 'vue';
 
 const newTaskTitle = ref<string>('')
+const newTaskDescription = ref<string>('')
 
 const emit = defineEmits<{
-    addTask: [newTaskTitle: string]
+    addTask: [newTaskTitle: string, newTaskDescription?: string]
 }>()
 
 function addTaskLocal() {
     // falsy => '', 0, undefined, null, false, NaN
     if (!newTaskTitle.value.trim()) {
-        alert('Поле не может быть пустым!')
+        alert('Название не может быть пустым!')
         return
     }
 
-    emit('addTask', newTaskTitle.value.trim())
+    emit('addTask', newTaskTitle.value.trim(), newTaskDescription.value.trim())
 
     // чистка
     newTaskTitle.value = ''
+    newTaskDescription.value = ''
 }
 
 </script>
@@ -25,7 +27,8 @@ function addTaskLocal() {
 <template>
     <form @submit.prevent="addTaskLocal" class="form">
         <!-- v-model -> директива two-way binding (двухсторонная привязка) -->
-        <input v-model="newTaskTitle" class="input" type="text" placeholder="Напишите новую задачу..." required />
+        <input v-model="newTaskTitle" class="input" type="text" placeholder="Напишите название задачи" required />
+        <textarea v-model="newTaskDescription" class="textarea" rows="10" placeholder="Укажите описание задачи" />
         <button class="submit-btn" type="submit">Добавить</button>
     </form>
 </template>
@@ -34,8 +37,21 @@ function addTaskLocal() {
 .form {
     margin-top: 20px;
     display: flex;
+    flex-direction: column;
     gap: 10px;
     justify-content: center;
+    max-width: 500px;
+    margin-inline: auto;
+}
+
+.textarea {
+    resize: none;
+    outline: 0;
+    padding: 7px;
+    font-size: 1rem;
+    background-color: #f1e2d1;
+    border: 0;
+    border-radius: 7px;
 }
 
 .input {
@@ -47,6 +63,10 @@ function addTaskLocal() {
     border-radius: 7px;
 }
 
+.input::placeholder, .textarea::placeholder {
+    color: #6a5c4c;
+}
+
 .submit-btn {
     border: 0;
     padding: 7px 12px;
@@ -56,5 +76,6 @@ function addTaskLocal() {
     border-radius: 7px;
     font-size: 1rem;
     cursor: pointer;
+    align-self: flex-end;
 }
 </style>

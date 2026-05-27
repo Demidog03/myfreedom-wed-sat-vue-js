@@ -1,11 +1,16 @@
 <script setup lang="ts">
+import useTasks from '@/modules/tasks/composables/useTasks';
 import { onMounted, ref, watch } from 'vue';
+import { RouterLink } from 'vue-router';
 
 const text = ref<string>('Text')
 const counter = ref<number>(0)
 
+const { tasks } = useTasks()
+
 onMounted(() => { // первичный рендер
     console.log('Компонент появился на странице!')
+    console.log(tasks.value)
 })
 
 watch(text, () => {
@@ -41,7 +46,8 @@ function increaseCounter() {
 </script>
 
 <template>
-    <h1>Test Component</h1>
+    <RouterLink to="/">Перейти на главную страницу</RouterLink>
+    <h1>Test Page</h1>
     <h2>{{ text }}</h2>
     <button @click="changeText">Change text</button>
     <h2>{{ counter }}</h2>

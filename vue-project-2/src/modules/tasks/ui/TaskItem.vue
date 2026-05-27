@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import type { Task } from '@/types/task.types';
+import type { Task } from '@/modules/tasks/types/task.types';
 import { onBeforeUnmount, onUnmounted } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
 
 const props = defineProps<{ // переменные которые получаем с род. компонента
     task: Task,
@@ -30,10 +33,16 @@ onUnmounted(() => {
     console.log(props.task)
     console.log('Компонент умер(')
 })
+
+function goToDetailPage() {
+    if (props.task.id) {
+        router.push(`/tasks/${props.task.id}`)
+    }
+}
 </script>
 
 <template>
-    <li :class="task.isCompleted ? 'completed' : 'active'">
+    <li @click.self="goToDetailPage" :class="task.isCompleted ? 'completed' : 'active'">
         <span>{{ task.title }}</span>
         <div class="buttons-container">
             <button @click="emit('completeTask', task.id)" v-if="!task.isCompleted" class="in-progress-btn">
@@ -56,14 +65,23 @@ li {
     border-radius: 7px;
     display: flex;
     justify-content: space-between;
+    cursor: pointer;
 }
 
 li.completed {
     background-color: #c0dcaa;
 }
 
+li.completed:hover {
+    background-color: #a1be8b;
+}
+
 li.active {
     background-color: #dcc3aa;
+}
+
+li.active:hover {
+    background-color: #b79f87;
 }
 
 .in-progress-btn {

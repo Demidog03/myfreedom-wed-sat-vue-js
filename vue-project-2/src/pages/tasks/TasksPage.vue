@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import useTasks from '@/modules/tasks/composables/useTasks';
+import { TASK_INJECT_KEYS } from '@/modules/tasks/constants/task.constants';
 import TaskForm from '@/modules/tasks/ui/TaskForm.vue';
 import TaskItem from '@/modules/tasks/ui/TaskItem.vue';
+import { provide } from 'vue';
 import { RouterLink } from 'vue-router';
 
 const { tasks, activeTasksAmount, completedTasksAmount, addTask, completeTask, deleteTask, returnTask } = useTasks()
+
+provide(TASK_INJECT_KEYS.completeTask, completeTask)
+provide(TASK_INJECT_KEYS.returnTask, returnTask)
+provide(TASK_INJECT_KEYS.deleteTask, deleteTask)
 
 </script>
 
@@ -20,8 +26,7 @@ const { tasks, activeTasksAmount, completedTasksAmount, addTask, completeTask, d
       выполнено</p>
 
     <ul v-if="tasks.length > 0" class="tasks-list">
-      <TaskItem v-for="task in tasks" v-bind:key="task.id" :task="task" @complete-task="completeTask"
-        @return-task="returnTask" @delete-task="deleteTask" />
+      <TaskItem v-for="task in tasks" v-bind:key="task.id" :task="task" />
     </ul>
 
     <p v-if="tasks.length === 0" class="no-tasks-text">Нет задач.</p>
@@ -29,14 +34,6 @@ const { tasks, activeTasksAmount, completedTasksAmount, addTask, completeTask, d
 </template>
 
 <style scoped>
-.container {
-  max-width: 800px;
-  margin-inline: auto;
-  padding: 40px 20px;
-
-  color: #541a1a;
-}
-
 .task-elements-text {
   margin-top: 20px;
 }

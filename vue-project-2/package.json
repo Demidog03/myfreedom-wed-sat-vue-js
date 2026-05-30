@@ -15,6 +15,7 @@
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
+    "@iconify-vue/mingcute": "^1.0.5",
     "vue": "^3.5.32",
     "vue-router": "^5.0.4",
     "z-vue-scan": "^0.0.37"

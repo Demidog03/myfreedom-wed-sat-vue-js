@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@iconify-vue/mingcute':
+        specifier: ^1.0.5
+        version: 1.0.5(vue@3.5.34(typescript@6.0.3))
       vue:
         specifier: ^3.5.32
         version: 3.5.34(typescript@6.0.3)
@@ -294,6 +297,17 @@ packages:
   '@humanwhocodes/retry@0.4.3':
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
+
+  '@iconify-vue/mingcute@1.0.5':
+    resolution: {integrity: sha512-9g/iEU2XdobbfS6vKp01btfBlPiMqlqa+GujwYOc5WVJierhKt3dF0+tamomdk9vYcIsJiGcqOaKvrJF0g6prA==}
+
+  '@iconify/css-vue@1.0.2':
+    resolution: {integrity: sha512-KXG9zXTMmJLi1AF2ket+YWUGdSqFvIMSnCO789uOVpba6SZhqeUttu0JIaEcq2dNlt4oonwdtMyerkpRkAFYhw==}
+    peerDependencies:
+      vue: '>=3.0.0'
+
+  '@iconify/types@2.0.0':
+    resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
 
   '@jridgewell/gen-mapping@0.3.13':
     resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
@@ -1933,6 +1947,19 @@ snapshots:
   '@humanwhocodes/module-importer@1.0.1': {}
 
   '@humanwhocodes/retry@0.4.3': {}
+
+  '@iconify-vue/mingcute@1.0.5(vue@3.5.34(typescript@6.0.3))':
+    dependencies:
+      '@iconify/css-vue': 1.0.2(vue@3.5.34(typescript@6.0.3))
+    transitivePeerDependencies:
+      - vue
+
+  '@iconify/css-vue@1.0.2(vue@3.5.34(typescript@6.0.3))':
+    dependencies:
+      '@iconify/types': 2.0.0
+      vue: 3.5.34(typescript@6.0.3)
+
+  '@iconify/types@2.0.0': {}
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:

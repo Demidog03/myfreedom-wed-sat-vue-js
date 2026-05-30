@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import type { Task } from '@/modules/tasks/types/task.types';
-import { onBeforeUnmount, onUnmounted } from 'vue';
+import { onBeforeUnmount, onUnmounted, provide } from 'vue';
 import { useRouter } from 'vue-router';
+import ReturnTaskButton from './ReturnTaskButton.vue';
+import CompleteTaskButton from './CompleteTaskButton.vue';
+import DeleteTaskButton from './DeleteTaskButton.vue';
+import { TASK_INJECT_KEYS } from '../constants/task.constants.ts';
 
 const router = useRouter()
 
@@ -9,11 +13,7 @@ const props = defineProps<{ // переменные которые получа�
     task: Task,
 }>()
 
-const emit = defineEmits<{ // функции которые получаем с род. компонента
-    completeTask: [id: number],
-    returnTask: [id: number],
-    deleteTask: [id: number]
-}>()
+provide(TASK_INJECT_KEYS.task, props.task)
 
 onBeforeUnmount(() => {
     // DOM только собирается исчезнуть (li пока жив)
@@ -45,15 +45,9 @@ function goToDetailPage() {
     <li @click.self="goToDetailPage" :class="task.isCompleted ? 'completed' : 'active'">
         <span>{{ task.title }}</span>
         <div class="buttons-container">
-            <button @click="emit('completeTask', task.id)" v-if="!task.isCompleted" class="in-progress-btn">
-                Завершить
-            </button>
-            <button @click="emit('returnTask', task.id)" v-if="task.isCompleted" class="completed-btn">
-                Выполнено
-            </button>
-            <button @click="emit('deleteTask', task.id)" class="delete-btn">
-                Удалить
-            </button>
+            <CompleteTaskButton />
+            <ReturnTaskButton />
+            <DeleteTaskButton />
         </div>
     </li>
 </template>
@@ -82,33 +76,6 @@ li.active {
 
 li.active:hover {
     background-color: #b79f87;
-}
-
-.in-progress-btn {
-    padding: 3px 7px;
-    background-color: #326460;
-    border: none;
-    border-radius: 4px;
-    color: white;
-    cursor: pointer;
-}
-
-.completed-btn {
-    padding: 3px 7px;
-    background-color: #1d6c1d;
-    border: none;
-    border-radius: 4px;
-    color: white;
-    cursor: pointer;
-}
-
-.delete-btn {
-    padding: 3px 7px;
-    background-color: #6c1d1e;
-    border: none;
-    border-radius: 4px;
-    color: white;
-    cursor: pointer;
 }
 
 .buttons-container {

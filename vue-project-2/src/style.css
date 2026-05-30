@@ -6,3 +6,11 @@
   box-sizing: border-box;
   font-family: 'Google Sans', sans-serif;
 }
+
+.container {
+  max-width: 800px;
+  margin-inline: auto;
+  padding: 40px 20px;
+
+  color: #541a1a;
+}

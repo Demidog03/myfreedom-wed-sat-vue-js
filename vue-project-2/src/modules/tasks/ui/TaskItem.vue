@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Task } from '@/modules/tasks/types/task.types';
-import { onBeforeUnmount, onUnmounted, provide } from 'vue';
+import { provide, toRef } from 'vue';
 import { useRouter } from 'vue-router';
 import ReturnTaskButton from './ReturnTaskButton.vue';
 import CompleteTaskButton from './CompleteTaskButton.vue';
@@ -13,26 +13,7 @@ const props = defineProps<{ // переменные которые получа�
     task: Task,
 }>()
 
-provide(TASK_INJECT_KEYS.task, props.task)
-
-onBeforeUnmount(() => {
-    // DOM только собирается исчезнуть (li пока жив)
-    const button = document.getElementById('button')
-    button?.removeEventListener('click', () => {
-        console.log('fsdfsd')
-    })
-})
-
-onUnmounted(() => {
-    // DOM уже исчез - ниче не сработает
-    const button = document.getElementById('button')
-    button?.removeEventListener('click', () => {
-        console.log('fsdfsd')
-    })
-
-    console.log(props.task)
-    console.log('Компонент умер(')
-})
+provide(TASK_INJECT_KEYS.task, toRef(props, 'task'))
 
 function goToDetailPage() {
     if (props.task.id) {
@@ -42,7 +23,7 @@ function goToDetailPage() {
 </script>
 
 <template>
-    <li @click.self="goToDetailPage" :class="task.isCompleted ? 'completed' : 'active'">
+    <li @click.self="goToDetailPage" :class="task.completed ? 'completed' : 'active'">
         <span>{{ task.title }}</span>
         <div class="buttons-container">
             <CompleteTaskButton />

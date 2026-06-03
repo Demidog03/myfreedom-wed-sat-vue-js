@@ -4,12 +4,12 @@ import type { Task } from '../types/task.types';
 import { TASK_INJECT_KEYS } from '../constants/task.constants';
 
 const task = inject<Task>(TASK_INJECT_KEYS.task)!
-const returnTask = inject<(id: number) => void>(TASK_INJECT_KEYS.returnTask)!
+const returnTask = inject<(id: string) => void>(TASK_INJECT_KEYS.returnTask)!
 
 </script>
 
 <template>
-    <button @click="returnTask(task.id)" v-if="task.isCompleted" class="completed-btn">
+    <button @click="returnTask(task.id)" v-if="task.completed" class="completed-btn">
         Выполнено
     </button>
 </template>

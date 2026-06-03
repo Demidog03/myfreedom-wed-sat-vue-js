@@ -4,7 +4,7 @@ import type { Task } from '../types/task.types';
 import { TASK_INJECT_KEYS } from '../constants/task.constants';
 
 const task = inject<Task>(TASK_INJECT_KEYS.task)!
-const deleteTask = inject<(id: number) => void>(TASK_INJECT_KEYS.deleteTask)!
+const deleteTask = inject<(id: string) => void>(TASK_INJECT_KEYS.deleteTask)!
 
 </script>
 

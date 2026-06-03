@@ -7,32 +7,39 @@ import ReturnTaskButton from '@/modules/tasks/ui/ReturnTaskButton.vue';
 import { computed, onMounted, provide } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import LeftFillIcon from '@iconify-vue/mingcute/left-fill';
+import FullscreenSpinner from '@/shared/ui/FullscreenSpinner.vue';
 
 const route = useRoute()
 const router = useRouter()
-const { tasks, completeTask, returnTask, deleteTask } = useTasks()
+const { selectedTask, isLoading, completeTask, setSelectedTaskId, returnTask, deleteTask, getTaskDetails } = useTasks()
 
-const currentTask = computed(() => tasks.value.find(t => t.id === Number(route.params.id)))
+onMounted(async () => {
+  if (typeof route?.params?.id === 'string') {
+    setSelectedTaskId(route.params.id)
+    getTaskDetails()
+  }
+})
+
 const statusText = computed(() => {
-    if (currentTask?.value?.isCompleted === true) {
+    if (selectedTask?.value?.completed === true) {
         return 'Завершен'
     }
-    if (currentTask?.value?.isCompleted === false) {
+    if (selectedTask?.value?.completed === false) {
         return 'Активный'
     }
     return 'Неопределен'
 })
 const statusClass = computed(() => {
-     if (currentTask?.value?.isCompleted === true) {
+     if (selectedTask?.value?.completed === true) {
         return 'completed'
     }
-    if (currentTask?.value?.isCompleted === false) {
+    if (selectedTask?.value?.completed === false) {
         return 'active'
     }
     return ''
 })
 
-function deleteTaskAndRedirect(id: number) {
+function deleteTaskAndRedirect(id: string) {
     deleteTask(id)
     router.replace('/tasks')
 }
@@ -41,7 +48,7 @@ onMounted(() => {
     console.log(route.params.id)
 })
 
-provide(TASK_INJECT_KEYS.task, currentTask)
+provide(TASK_INJECT_KEYS.task, selectedTask)
 provide(TASK_INJECT_KEYS.completeTask, completeTask)
 provide(TASK_INJECT_KEYS.returnTask, returnTask)
 provide(TASK_INJECT_KEYS.deleteTask, deleteTaskAndRedirect)
@@ -51,17 +58,18 @@ provide(TASK_INJECT_KEYS.deleteTask, deleteTaskAndRedirect)
     <div class="container">
         <RouterLink class="go-back-link" to="/tasks"> <LeftFillIcon height="1em" /> Назад</RouterLink>
         <h1 class="header secondary-text">Детали задачи</h1>
-        <h2 class="title"><span class="secondary-text">Название:</span> <span class="title-text">{{ currentTask?.title
+        <h2 class="title"><span class="secondary-text">Название:</span> <span class="title-text">{{ selectedTask?.title
             || 'Данные не найдены' }}</span></h2>
         <p class="description"><span class="secondary-text">Описание:</span> <span class="description-text">{{
-            currentTask?.description || 'Данные не найдены' }}</span></p>
+            selectedTask?.description || 'Данные не найдены' }}</span></p>
         <p class="status">Статус: <span :class="'status-text ' + statusClass">{{ statusText }} <div
                     :class="'circle-' + statusClass"></div></span></p>
-        <div class="buttons-container" v-if="Boolean(currentTask)">
+        <div class="buttons-container" v-if="Boolean(selectedTask)">
             <CompleteTaskButton />
             <ReturnTaskButton />
             <DeleteTaskButton />
         </div>
+        <FullscreenSpinner :is-loading="isLoading" />
     </div>
 </template>
 

@@ -4,12 +4,12 @@ import type { Task } from '../types/task.types';
 import { TASK_INJECT_KEYS } from '../constants/task.constants';
 
 const task = inject<Task>(TASK_INJECT_KEYS.task)!
-const completeTask = inject<(id: number) => void>(TASK_INJECT_KEYS.completeTask)!
+const completeTask = inject<(id: string) => void>(TASK_INJECT_KEYS.completeTask)!
 
 </script>
 
 <template>
-    <button @click="completeTask(task.id)" v-if="!task.isCompleted" class="in-progress-btn">
+    <button @click="completeTask(task.id)" v-if="!task.completed" class="in-progress-btn">
         Выполнить
     </button>
 </template>

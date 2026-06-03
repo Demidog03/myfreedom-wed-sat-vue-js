@@ -1,59 +1,128 @@
 import type { Task } from '@/modules/tasks/types/task.types'
-import useLocalStorageRef from '@/shared/composables/useLocalStorageRef'
-import { computed } from 'vue'
-
+import { computed, onMounted, ref } from 'vue'
+import tasksApi from '../api/tasks.api'
 
 export default function useTasks() {
-    const tasks = useLocalStorageRef<Task[]>('tasks', [])
+    const tasks = ref<Task[]>([])
+    const selectedTask = ref<Task>()
+    const selectedTaskId = ref<string>()
+    const isLoading = ref<boolean>(false)
 
-    const activeTasksAmount = computed(() => tasks.value.filter((t) => t.isCompleted === false).length)
+    const activeTasksAmount = computed(() => tasks.value.filter((t) => t.completed === false).length)
     const completedTasksAmount = computed(
-        () => tasks.value.filter((t) => t.isCompleted === true).length,
+        () => tasks.value.filter((t) => t.completed === true).length,
     )
 
-    function addTask(newTaskTitle: string, newTaskDescription?: string) {
-        const newTaks: Task = {
-            id: Date.now(),
+    onMounted(() => {
+      getTasks()
+    })
+
+    function startLoading() {
+      isLoading.value = true
+    }
+
+    function stopLoading() {
+      isLoading.value = false
+    }
+
+    function setSelectedTaskId(id: string) {
+      selectedTaskId.value = id
+    }
+
+    async function getTaskDetails() {
+      if (selectedTaskId.value) {
+        try {
+          startLoading()
+          const data = await tasksApi.getTaskDetails(selectedTaskId.value)
+          selectedTask.value = data
+        }
+        finally {
+          stopLoading()
+        }
+      }
+    }
+
+    async function getTasks() {
+      try {
+        startLoading()
+        const data = await tasksApi.getTasks()
+        tasks.value = data
+      }
+      finally {
+        stopLoading()
+      }
+    }
+
+    async function addTask(newTaskTitle: string, newTaskDescription?: string) {
+        try {
+          startLoading()
+          const newData = {
             title: newTaskTitle,
-            isCompleted: false,
+            description: newTaskDescription
+          }
+
+          await tasksApi.createTask(newData)
+        }
+        finally {
+          stopLoading()
         }
 
-        if (newTaskDescription) {
-            newTaks.description = newTaskDescription
-        }
-
-        tasks.value.push(newTaks)
+        getTasks()
+        getTaskDetails()
     }
 
-    function completeTask(id: number) {
-        const taskToChange = tasks.value.find((t) => t.id === id)
+    async function completeTask(id: string) {
+      try {
+        startLoading()
+        await tasksApi.changeStatus(id, true)
+      }
+      finally {
+        stopLoading()
+      }
 
-        if (taskToChange) {
-            taskToChange.isCompleted = true
-        }
+      getTasks()
+      getTaskDetails()
     }
 
-    function returnTask(id: number) {
-        const taskToChange = tasks.value.find((t) => t.id === id)
+    async function returnTask(id: string) {
+      try {
+        startLoading()
+        await tasksApi.changeStatus(id, false)
+      }
+      finally {
+        stopLoading()
+      }
 
-        if (taskToChange) {
-            taskToChange.isCompleted = false
-        }
+      getTasks()
+      getTaskDetails()
     }
 
-    function deleteTask(id: number) {
-        tasks.value = tasks.value.filter(t => t.id !== id)
+    async function deleteTask(id: string) {
+      try {
+        startLoading()
+        await tasksApi.deleteTask(id)
+      }
+      finally {
+        stopLoading()
+      }
+
+      getTasks()
+      getTaskDetails()
     }
 
     return {
         // данные - refы
-        tasks: tasks,
-        activeTasksAmount: activeTasksAmount,
-        completedTasksAmount: completedTasksAmount,
+        selectedTask,
+        tasks,
+        isLoading,
+        activeTasksAmount,
+        completedTasksAmount,
         // функции
-        addTask: addTask,
-        completeTask: completeTask,
-        returnTask: returnTask,
-        deleteTask: deleteTask,
+        addTask,
+        completeTask,
+        returnTask,
+        deleteTask,
+        getTaskDetails,
+        setSelectedTaskId
     }
 }

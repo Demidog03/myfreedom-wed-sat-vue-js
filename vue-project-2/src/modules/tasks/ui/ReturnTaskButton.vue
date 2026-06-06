@@ -2,9 +2,10 @@
 import { inject } from 'vue';
 import type { Task } from '../types/task.types';
 import { TASK_INJECT_KEYS } from '../constants/task.constants';
+import useReturnTaskMutation from '../queries/useReturnTaskMutation';
 
 const task = inject<Task>(TASK_INJECT_KEYS.task)!
-const returnTask = inject<(id: string) => void>(TASK_INJECT_KEYS.returnTask)!
+const { mutate: returnTask } = useReturnTaskMutation()
 
 </script>
 

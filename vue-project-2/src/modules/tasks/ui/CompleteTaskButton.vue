@@ -2,9 +2,10 @@
 import { inject } from 'vue';
 import type { Task } from '../types/task.types';
 import { TASK_INJECT_KEYS } from '../constants/task.constants';
+import useCompleteTaskMutation from '../queries/useCompleteTaskMutation';
 
 const task = inject<Task>(TASK_INJECT_KEYS.task)!
-const completeTask = inject<(id: string) => void>(TASK_INJECT_KEYS.completeTask)!
+const { mutate: completeTask } = useCompleteTaskMutation()
 
 </script>
 

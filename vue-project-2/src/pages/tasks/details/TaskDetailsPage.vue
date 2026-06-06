@@ -1,24 +1,16 @@
 <script setup lang="ts">
-import useTasks from '@/modules/tasks/composables/useTasks';
 import { TASK_INJECT_KEYS } from '@/modules/tasks/constants/task.constants';
 import CompleteTaskButton from '@/modules/tasks/ui/CompleteTaskButton.vue';
 import DeleteTaskButton from '@/modules/tasks/ui/DeleteTaskButton.vue';
 import ReturnTaskButton from '@/modules/tasks/ui/ReturnTaskButton.vue';
 import { computed, onMounted, provide } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import LeftFillIcon from '@iconify-vue/mingcute/left-fill';
 import FullscreenSpinner from '@/shared/ui/FullscreenSpinner.vue';
+import useGetTaskDetailsQuery from '@/modules/tasks/queries/useGetTaskDetailsQuery';
 
 const route = useRoute()
-const router = useRouter()
-const { selectedTask, isLoading, completeTask, setSelectedTaskId, returnTask, deleteTask, getTaskDetails } = useTasks()
-
-onMounted(async () => {
-  if (typeof route?.params?.id === 'string') {
-    setSelectedTaskId(route.params.id)
-    getTaskDetails()
-  }
-})
+const { data: selectedTask, isLoading } = useGetTaskDetailsQuery(typeof route?.params?.id === 'string' ? route?.params?.id : '')
 
 const statusText = computed(() => {
     if (selectedTask?.value?.completed === true) {
@@ -39,19 +31,11 @@ const statusClass = computed(() => {
     return ''
 })
 
-function deleteTaskAndRedirect(id: string) {
-    deleteTask(id)
-    router.replace('/tasks')
-}
-
 onMounted(() => {
     console.log(route.params.id)
 })
 
 provide(TASK_INJECT_KEYS.task, selectedTask)
-provide(TASK_INJECT_KEYS.completeTask, completeTask)
-provide(TASK_INJECT_KEYS.returnTask, returnTask)
-provide(TASK_INJECT_KEYS.deleteTask, deleteTaskAndRedirect)
 </script>
 
 <template>
@@ -67,7 +51,7 @@ provide(TASK_INJECT_KEYS.deleteTask, deleteTaskAndRedirect)
         <div class="buttons-container" v-if="Boolean(selectedTask)">
             <CompleteTaskButton />
             <ReturnTaskButton />
-            <DeleteTaskButton />
+            <DeleteTaskButton :should-redirect="true" />
         </div>
         <FullscreenSpinner :is-loading="isLoading" />
     </div>

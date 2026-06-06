@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import useTasks from '@/modules/tasks/composables/useTasks';
-import { TASK_INJECT_KEYS } from '@/modules/tasks/constants/task.constants';
+import useGetTasksQuery from '@/modules/tasks/queries/useGetTasksQuery';
 import TaskForm from '@/modules/tasks/ui/TaskForm.vue';
 import TaskItem from '@/modules/tasks/ui/TaskItem.vue';
 import FullscreenSpinner from '@/shared/ui/FullscreenSpinner.vue';
-import { provide } from 'vue';
+import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
 
-const { tasks, isLoading, activeTasksAmount, completedTasksAmount, addTask, completeTask, deleteTask, returnTask } = useTasks()
+const { data: tasks, isLoading } = useGetTasksQuery()
 
-provide(TASK_INJECT_KEYS.completeTask, completeTask)
-provide(TASK_INJECT_KEYS.returnTask, returnTask)
-provide(TASK_INJECT_KEYS.deleteTask, deleteTask)
+const activeTasksAmount = computed(() => tasks?.value?.filter((t) => t.completed === false).length)
+const completedTasksAmount = computed(
+  () => tasks?.value?.filter((t) => t.completed === true).length,
+)
 
 </script>
 
@@ -21,18 +21,18 @@ provide(TASK_INJECT_KEYS.deleteTask, deleteTask)
     <RouterLink to="/test">Перейти на тестовую страницу</RouterLink>
     <h2 class="title">Менеджер задач</h2>
 
-    <TaskForm @add-task="addTask" />
+    <TaskForm />
 
     <p class="task-elements-text">Количество задач: {{ activeTasksAmount }} активно, {{ completedTasksAmount }}
       выполнено</p>
 
-    <ul v-if="tasks.length > 0" class="tasks-list">
+    <ul v-if="tasks && tasks?.length > 0" class="tasks-list">
       <TaskItem v-for="task in tasks" v-bind:key="task.id" :task="task" />
     </ul>
 
-    <p v-if="tasks.length === 0" class="no-tasks-text">Нет задач.</p>
+    <p v-if="tasks && tasks?.length === 0" class="no-tasks-text">Нет задач.</p>
 
-    <FullscreenSpinner :is-loading="isLoading"/>
+    <FullscreenSpinner :is-loading="isLoading" />
   </div>
 </template>
 

@@ -2,14 +2,26 @@
 import { inject } from 'vue';
 import type { Task } from '../types/task.types';
 import { TASK_INJECT_KEYS } from '../constants/task.constants';
+import useDeleteTaskMutation from '../queries/useDeleteTaskMutation';
+import { useRouter } from 'vue-router';
 
+defineProps<{
+  shouldRedirect?: boolean
+}>()
+
+const router = useRouter()
 const task = inject<Task>(TASK_INJECT_KEYS.task)!
-const deleteTask = inject<(id: string) => void>(TASK_INJECT_KEYS.deleteTask)!
+const { mutate: deleteTask } = useDeleteTaskMutation()
 
 </script>
 
 <template>
-    <button @click="deleteTask(task.id)" class="delete-btn">
+    <button @click="() => {
+      deleteTask(task.id)
+      if (shouldRedirect) {
+        router.replace('/tasks')
+      }
+    }" class="delete-btn">
         Удалить
     </button>
 </template>

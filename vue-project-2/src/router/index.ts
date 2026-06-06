@@ -1,6 +1,5 @@
 import TaskDetailsPage from '@/pages/tasks/details/TaskDetailsPage.vue'
 import TasksPage from '@/pages/tasks/TasksPage.vue'
-import TestPage from '@/pages/test/TestPage.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -18,10 +17,6 @@ const router = createRouter({
       path: '/tasks/:id', // :id => динамический роут (динамический адрес)
       component: TaskDetailsPage
     },
-    {
-      path: '/test',
-      component: TestPage
-    }
   ],
 })
 

@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import useAddTaskMutation from '../queries/useAddTaskMutation';
 
 const newTaskTitle = ref<string>('')
 const newTaskDescription = ref<string>('')
-
-const emit = defineEmits<{
-    addTask: [newTaskTitle: string, newTaskDescription?: string]
-}>()
+const { mutate: addTask } = useAddTaskMutation()
 
 function addTaskLocal() {
     // falsy => '', 0, undefined, null, false, NaN
@@ -15,7 +13,10 @@ function addTaskLocal() {
         return
     }
 
-    emit('addTask', newTaskTitle.value.trim(), newTaskDescription.value.trim())
+    addTask({
+      title: newTaskTitle.value.trim(),
+      description: newTaskDescription.value.trim()
+    })
 
     // чистка
     newTaskTitle.value = ''
